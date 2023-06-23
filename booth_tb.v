@@ -1,41 +1,48 @@
-`timescale 1ns / 1ps
-
-module BoothMultiplication_tb;
+module boothtb;
 
 	// Inputs
-	reg clk;
-	reg [31:0] Multiplicand;
-	reg [31:0] Multiplier;
 
-	wire [63:0] result;
+	reg signed [31:0] X;
+	reg signed [31:0] Y;
 
-	// Instantiate the Unit Under Test (UUT)
-	BoothMultipilcation uut (
-		.clk(clk), 
-		.Multiplicand(Multiplicand), 
-		.Multiplier(Multiplier), 
-		.run(run), 
-		.isValid(isValid), 
-		.result(result)
+	// Outputs
+	wire signed [63:0] Z;
+	integer x1=0;
+	// Instantate the Unit Under Test (UUT)
+	BoothMultipilcation uut ( 
+		.X(X), 
+		.Y(Y), 
+		.Z(Z)
 	);
-	
-	always #10 clk = ~clk;
-
 	initial begin
-		// Initialize Inputs
+        X = 1;
+		Y = 1;
 		
-		clk = 0;
-		Multiplicand = 4;
-		Multiplier = -7;
-		run = 0;
-		// Wait 100 ns for global reset to finish
-		#170;
-		run = 1;
-		#400;
-		run = 0;
-		#40;
-		run = 1;
-	end
-      
-endmodule
+		for (x1=1; x1<10; x1=x1+1)
+		begin
+			#5 X = X+x1+1;
+			    Y = Y+x1+2;
+			#5 $display("x = %d, y = %d, ans = %d\n", X, Y, Z);
+		end
+		
+		for (x1=9; x1<100; x1=x1+5)
+		begin
+			#5 X = X+x1;
+			    Y = Y+2*x1;
+			#5 $display("x = %d, y = %d, ans = %d\n", X, Y, Z);
+		end
+		X = 12;
+		Y = -12;
+		#5 $display("a = %d, b = %d,  = %d\n", X, Y, Z);
+		
+		X = -11;
+		Y = 12;
+		#5 $display("a = %d, b = %d,  = %d\n", X, Y, Z);
+		
+		X = -11;
+		Y = -11;
+		#5 $display("a = %d, b = %d,  = %d\n", X, Y, Z);
+      $finish;
 
+   end
+endmodule 
